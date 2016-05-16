@@ -1,0 +1,27 @@
+#!/bin/bash
+
+White="$(tput setaf 15)"
+Red="$(tput setaf 9)"
+Green="$(tput setaf 10)"
+Yellow="$(tput setaf 11)"
+Bold=$(tput bold)
+Normal=$(tput sgr0)
+cd ~/.dicts
+total=$(grep "^\w" * | wc -l)
+echo "${Bold}${White}TOTAL: $total KOSA KATA${Normal}"
+while true; do
+	echo -n "${Normal}${Bold}${Yellow}MASUKKAN KATA: ${Normal}${Green}"
+	read word
+	echo -n "${Normal}"
+	if [[ "$word" ]]; then
+		result=$(grep -ihw "^$word" * | head -1 | sed 's/\t/ = /g')
+		if [[ "$result" ]]; then
+			echo "$result" | sed -e "s/$word/${Bold}${Green}$word${Normal}${White}/I"
+			echo -n "${Normal}"
+		else
+			echo "${Bold}${Red}Kata $word tidak ditemukan${Normal}"
+		fi
+	else
+		echo "${Bold}${Red}Kata tidak boleh kosong${Normal}"
+	fi
+done
